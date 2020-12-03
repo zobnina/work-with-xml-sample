@@ -1,32 +1,27 @@
 package com.example.xmlsdo;
 
-import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class XmlRouteBuilder extends RouteBuilder {
 
-    private static final Logger LOGGER = LogManager.getLogger(XmlRouteBuilder.class);
-
     @Autowired
-    XmlSdoProcessor xmlSdoProcessor;
+    XmlJsonProcessor xmlJsonProcessor;
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
         restConfiguration()
                 .component("{{camel.rest.component}}")
                 .host("{{camel.rest.host}}")
                 .port("{{camel.rest.port}}");
 
-        rest("{{route.xml-json-sdo}}")
+        rest("{{route.xml-json}}")
                 .post()
                 .route()
-                .process(xmlSdoProcessor)
-                .to("{{route.json-out-file}}")
-        .log(LoggingLevel.DEBUG, "${body}");
+                .process(xmlJsonProcessor)
+                .to("{{route.json-out-file}}");
+
     }
 }

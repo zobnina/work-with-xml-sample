@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class XmlSdoProcessor implements Processor {
-    private static final Logger LOGGER = LogManager.getLogger(XmlSdoProcessor.class);
+public class XmlJsonProcessor implements Processor {
+    private static final Logger LOGGER = LogManager.getLogger(XmlJsonProcessor.class);
 
     @Override
     public void process(Exchange exchange) throws Exception {
@@ -26,8 +26,7 @@ public class XmlSdoProcessor implements Processor {
         Product product = createProduct(productDataObject);
         ObjectMapper productMapper = new ObjectMapper();
         String productJson = productMapper.writeValueAsString(product);
-        exchange.getOut().setBody(productJson);
-        //exchange.getIn().setBody(productJson);
+        exchange.getIn().setBody(productJson);
     }
 
     private Product createProduct(DataObject productDataObject) {
@@ -37,20 +36,22 @@ public class XmlSdoProcessor implements Processor {
         product.setAvailability(productDataObject.getBoolean("availability"));
         DataObject reviewsDataObject = productDataObject.getDataObject("reviews");
         product.setReviews(createReviews(reviewsDataObject));
-        LOGGER.debug(product);
+        String logMessage = String.format("Product: %s", product);
+        LOGGER.debug(logMessage);
         return product;
     }
 
     private Map<String, String> createReviews(DataObject reviewsDataObject) {
         List<?> reviewsDataObjects = reviewsDataObject.getList("review");
         Map<String, String> reviews = new LinkedHashMap<>();
-        for(Object reviewObject: reviewsDataObjects){
-            DataObject reviewDataObject = ((DataObject)reviewObject);
+        for (Object reviewObject : reviewsDataObjects) {
+            DataObject reviewDataObject = ((DataObject) reviewObject);
             String author = reviewDataObject.getString("author");
             String text = reviewDataObject.getString("text");
-            reviews.put(author,text);
+            reviews.put(author, text);
         }
-        LOGGER.debug(reviews);
+        String logMessage = String.format("Reviews: %s", reviews);
+        LOGGER.debug(logMessage);
         return reviews;
     }
 }
