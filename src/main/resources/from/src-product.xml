@@ -4,6 +4,7 @@
         <product availability="true">
             <name>Product 2</name>
             <price>200.0</price>
+            <size>XL</size>
             <reviews>
                 <review>
                     <author>Customer 2</author>
@@ -18,6 +19,7 @@
         <product availability="true">
             <name>Product 1</name>
             <price>100.0</price>
+            <size>S</size>
             <reviews>
                 <review>
                     <author>Customer 1</author>

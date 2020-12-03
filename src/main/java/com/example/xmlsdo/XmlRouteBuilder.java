@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
 public class XmlRouteBuilder extends RouteBuilder {
 
     @Autowired
+    XmlSdoJsonProcessor xmlSdoJsonProcessor;
+
+    @Autowired
     XmlJsonProcessor xmlJsonProcessor;
 
     @Autowired
@@ -19,6 +22,12 @@ public class XmlRouteBuilder extends RouteBuilder {
                 .component("{{camel.rest.component}}")
                 .host("{{camel.rest.host}}")
                 .port("{{camel.rest.port}}");
+
+        rest("{{route.xml-json-sdo}}")
+                .post()
+                .route()
+                .process(xmlSdoJsonProcessor)
+                .to("{{route.json-out-file}}");
 
         rest("{{route.xml-json}}")
                 .post()
