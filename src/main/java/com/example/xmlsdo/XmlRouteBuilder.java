@@ -10,6 +10,9 @@ public class XmlRouteBuilder extends RouteBuilder {
     @Autowired
     XmlJsonProcessor xmlJsonProcessor;
 
+    @Autowired
+    JsonXmlProcessor jsonXMLProcessor;
+
     @Override
     public void configure() {
         restConfiguration()
@@ -22,6 +25,13 @@ public class XmlRouteBuilder extends RouteBuilder {
                 .route()
                 .process(xmlJsonProcessor)
                 .to("{{route.json-out-file}}");
+
+
+        rest("{{route.json-xml}}")
+                .post()
+                .route()
+                .process(jsonXMLProcessor)
+                .to("{{route.xml-out-file}}");
 
     }
 }

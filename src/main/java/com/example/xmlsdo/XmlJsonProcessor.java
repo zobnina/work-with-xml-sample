@@ -1,5 +1,7 @@
 package com.example.xmlsdo;
 
+import com.example.xmlsdo.model.Catalog;
+import com.example.xmlsdo.model.Product;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import commonj.sdo.DataObject;
 import commonj.sdo.helper.XMLDocument;
@@ -10,6 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,11 +25,25 @@ public class XmlJsonProcessor implements Processor {
     public void process(Exchange exchange) throws Exception {
         String xmlString = exchange.getIn().getBody(String.class);
         XMLDocument xmlProductDocument = XMLHelper.INSTANCE.load(xmlString);
-        DataObject productDataObject = xmlProductDocument.getRootObject();
-        Product product = createProduct(productDataObject);
+        DataObject catalogDataObject = xmlProductDocument.getRootObject();
+        Catalog catalog = createCatalog(catalogDataObject);
         ObjectMapper productMapper = new ObjectMapper();
-        String productJson = productMapper.writeValueAsString(product);
+        String productJson = productMapper.writeValueAsString(catalog);
         exchange.getIn().setBody(productJson);
+    }
+
+    private Catalog createCatalog(DataObject catalogDataObject) {
+        DataObject cardsDataObject = catalogDataObject.getDataObject("productCards");
+        List<?> productsDataObjects = cardsDataObject.getList("product");
+        List<Product> products = new ArrayList<>();
+        for(Object productObject: productsDataObjects){
+            DataObject productDataObject = ((DataObject)productObject);
+            Product product = createProduct(productDataObject);
+            products.add(product);
+        }
+        Catalog catalog = new Catalog();
+        catalog.setProducts(products);
+        return catalog;
     }
 
     private Product createProduct(DataObject productDataObject) {
