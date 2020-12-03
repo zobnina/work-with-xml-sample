@@ -20,6 +20,7 @@
         <java.version>1.8</java.version>
         <sdo.version>2.1.1</sdo.version>
         <camel.version>3.5.0</camel.version>
+        <jackson.version>2.11.3</jackson.version>
         <log4j.version>2.8.2</log4j.version>
     </properties>
 
@@ -62,6 +63,13 @@
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-netty-http</artifactId>
             <version>${camel.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
 
         <dependency>
