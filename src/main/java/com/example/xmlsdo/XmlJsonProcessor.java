@@ -15,10 +15,8 @@ public class XmlJsonProcessor implements Processor {
     @Override
     public void process(Exchange exchange) throws Exception {
         String xmlString = exchange.getIn().getBody(String.class);
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(xmlString.getBytes());
-        JAXBContext jaxbContext = JAXBContext.newInstance(Catalog.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-        Catalog catalog = (Catalog) jaxbUnmarshaller.unmarshal(inputStream);
+        CatalogConverter catalogConverter = new CatalogConverter();
+        Catalog catalog = catalogConverter.xmlToCatalog(xmlString);
         ObjectMapper catalogMapper = new ObjectMapper();
         String productJson = catalogMapper.writeValueAsString(catalog);
         exchange.getIn().setBody(productJson);

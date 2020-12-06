@@ -1,10 +1,13 @@
 package com.example.xmlsdo;
 
 import com.example.xmlsdo.model.Catalog;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 
@@ -18,7 +21,10 @@ public class CatalogConverter {
         return outputStream.toString();
     }
 
-    public String xmlToCatalog(String xml){
-        return null;
+    public Catalog xmlToCatalog(String xmlString) throws JAXBException {
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(xmlString.getBytes());
+        JAXBContext jaxbContext = JAXBContext.newInstance(Catalog.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+        return (Catalog) jaxbUnmarshaller.unmarshal(inputStream);
     }
 }
