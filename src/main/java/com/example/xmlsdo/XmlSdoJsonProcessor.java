@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import commonj.sdo.DataObject;
 import commonj.sdo.helper.XMLDocument;
 import commonj.sdo.helper.XMLHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.logging.log4j.LogManager;
@@ -17,9 +18,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Component
 public class XmlSdoJsonProcessor implements Processor {
-    private static final Logger LOGGER = LogManager.getLogger(XmlSdoJsonProcessor.class);
 
     @Override
     public void process(Exchange exchange) throws Exception {
@@ -54,7 +55,7 @@ public class XmlSdoJsonProcessor implements Processor {
         DataObject reviewsDataObject = productDataObject.getDataObject("reviews");
         product.setReviews(createReviews(reviewsDataObject));
         String logMessage = String.format("Product: %s", product);
-        LOGGER.debug(logMessage);
+        log.debug(logMessage);
         return product;
     }
 
@@ -68,7 +69,7 @@ public class XmlSdoJsonProcessor implements Processor {
             reviews.put(author, text);
         }
         String logMessage = String.format("Reviews: %s", reviews);
-        LOGGER.debug(logMessage);
+        log.debug(logMessage);
         return reviews;
     }
 }
